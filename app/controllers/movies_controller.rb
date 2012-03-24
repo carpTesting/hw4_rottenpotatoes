@@ -61,6 +61,11 @@ class MoviesController < ApplicationController
   def similar
     @movie = Movie.find(params[:id])
     @movies = Movie.find(:all, :conditions => {:director => @movie.director})
+    if(@movie.director == nil or @movie.director == "")
+      flash[:notice] = "'#{@movie.title}' has no director info"
+      @movies = []
+      return redirect_to '/movies/'
+    end
     @selected_ratings = params[:ratings] || session[:ratings] || {}
     @all_ratings = Movie.all_ratings
     render :action=>'index'
