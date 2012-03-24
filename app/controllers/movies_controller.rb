@@ -58,4 +58,11 @@ class MoviesController < ApplicationController
     redirect_to movies_path
   end
 
+  def similar
+    @movie = Movie.find(params[:id])
+    @movies = Movie.find(:all, :conditions => {:director => @movie.director})
+    @selected_ratings = params[:ratings] || session[:ratings] || {}
+    @all_ratings = Movie.all_ratings
+    render :action=>'index'
+  end
 end
